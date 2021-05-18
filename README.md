@@ -1,13 +1,15 @@
+*********************************************************************************
 
-Prerequisite:
+Pre-requisite:
 
-python
+python should be installed
 
-For mac users:
+For iOS users:
 
 Install iTerm, terminal-notifier
 
 Make sure that the permission is configured. Allow full disk access permission to the following:
+
 zsh, python, cron
 
 Check this for more details: https://stackoverflow.com/questions/58844669/trying-to-run-a-python-script-with-cron-getting-errno-1-operation-not-permitt
@@ -19,13 +21,14 @@ Command to install terminal-notifier:
 
 Configure:
 
-Download the `CoWIN_Booking` folder.
+Download the `CoWIN_Booking` repository.
 
 Update the scripts with the expected details, like the mobile number, pincode, preferred centers, min_age_limit, etc
 
 Add the crontab to execute this every minute:
 
 Open terminal
+
 Enter the command `crontab -e`
 
 This will open a file in the editor. Edit this and add the following:
@@ -43,7 +46,7 @@ Errors can be checked in the `issues.txt` file
 How this works:
 
 This will create an alert as soon as the slot gets available for booking and checks for available slots every minute.
-Once the slot is available, it will open the terminal
+Once the slot is available, it will open the terminal for you.
 
 Follow the steps shared on how to book the slot. Your slot will get booked.
 
@@ -52,7 +55,7 @@ Follow the steps shared on how to book the slot. Your slot will get booked.
 How to book the slot:
 
 Generate the token and captcha required while booking the slot.
-Use the following command:
+Run the following command:
 
 `python generate_token.py`
 
@@ -79,5 +82,7 @@ Update the appointment_id in the `cancel_slot.py` and run the following command:
 References:
 
 https://apisetu.gov.in/public/marketplace/api/cowin/
+
 https://stackoverflow.com/questions/17651017/python-post-osx-notification
+
 https://stackoverflow.com/questions/58844669/trying-to-run-a-python-script-with-cron-getting-errno-1-operation-not-permitt
