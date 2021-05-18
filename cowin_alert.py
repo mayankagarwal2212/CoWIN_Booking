@@ -2,7 +2,7 @@
 
 import requests, json, os
 from sys import platform
-from datetime import datetime
+import datetime
 
 def check_os():
   if platform == "linux" or platform == "linux2":
@@ -24,69 +24,76 @@ def notify(title, subtitle, message):
     else:
       os.system("notify-send Vaccine-Slot-Available '{}'".format(message))
 
-today=datetime.today().strftime('%d-%m-%Y')
 
-# Search by PIN
-# update the pincode in the url
-url = "https://cdn-api.co-vin.in/api/v2/appointment/sessions/public/calendarByPin?pincode=826001&date={}".format(today)
+def get_available_slots(today):
 
-# To search by District
-# update the district id in the url
-# url = "Request URL: https://cdn-api.co-vin.in/api/v2/appointment/sessions/public/calendarByDistrict?district_id=257&date={}".format(today)
+  available_slots = list()
+  # Search by PIN
+  # update the pincode in the url
+  url = "https://cdn-api.co-vin.in/api/v2/appointment/sessions/public/calendarByPin?pincode=826001&date={}".format(today)
 
-payload={}
-headers = {
-  'authority': 'cdn-api.co-vin.in',
-  'sec-ch-ua': '" Not A;Brand";v="99", "Chromium";v="90", "Google Chrome";v="90"',
-  'accept': 'application/json, text/plain, */*',
-  'sec-ch-ua-mobile': '?0',
-  'user-agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/90.0.4430.212 Safari/537.36',
-  'origin': 'https://www.cowin.gov.in',
-  'sec-fetch-site': 'cross-site',
-  'sec-fetch-mode': 'cors',
-  'sec-fetch-dest': 'empty',
-  'referer': 'https://www.cowin.gov.in/',
-  'accept-language': 'en-IN,en;q=0.9,hi-IN;q=0.8,hi;q=0.7,en-GB;q=0.6,en-US;q=0.5'
-}
+  # To search by District
+  # update the district id in the url
+  # url = "Request URL: https://cdn-api.co-vin.in/api/v2/appointment/sessions/public/calendarByDistrict?district_id=257&date={}".format(today)
 
-response = requests.request("GET", url, headers=headers, data=payload)
+  payload={}
+  headers = {
+    'authority': 'cdn-api.co-vin.in',
+    'sec-ch-ua': '" Not A;Brand";v="99", "Chromium";v="90", "Google Chrome";v="90"',
+    'accept': 'application/json, text/plain, */*',
+    'sec-ch-ua-mobile': '?0',
+    'user-agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/90.0.4430.212 Safari/537.36',
+    'origin': 'https://www.cowin.gov.in',
+    'sec-fetch-site': 'cross-site',
+    'sec-fetch-mode': 'cors',
+    'sec-fetch-dest': 'empty',
+    'referer': 'https://www.cowin.gov.in/',
+    'accept-language': 'en-IN,en;q=0.9,hi-IN;q=0.8,hi;q=0.7,en-GB;q=0.6,en-US;q=0.5'
+  }
 
-if response.status_code != 200:
-  print("Exception raised :: {}".format(response._content))
-  raise Exception(response)
+  response = requests.request("GET", url, headers=headers, data=payload)
 
-response_data = json.loads(response._content)
+  if response.status_code != 200:
+    print("Exception raised :: {}".format(response._content))
+    raise Exception(response)
 
-# age limit preference for alert
-# for 45*, min_age_limit = 45
-# for 18*, min_age_limit = 18
-min_age_limit = 18
-centers = response_data.get('centers')
+  response_data = json.loads(response._content)
 
-# centers to exclude for alert
-ignore_centers = [
-  # 701780,
-  # 618194,
-]
-preferred_centers = [
-  # 701780,
-  # 618194,
-]
+  # age limit preference for alert
+  # for 45*, min_age_limit = 45
+  # for 18*, min_age_limit = 18
+  min_age_limit = 18
+  centers = response_data.get('centers')
+
+  # centers to exclude for alert
+  ignore_centers = [
+    # 701780,
+    # 618194,
+  ]
+  preferred_centers = [
+    # 701780,
+    # 618194,
+  ]
+  for data in centers:
+    if data.get("center_id") in ignore_centers:
+      continue;
+    if len(preferred_centers) > 0 and data.get("center_id") not in preferred_centers:
+      continue;
+    for session in data.get("sessions"):
+      center_details = "{}, {}, {}, {}\nCenter id :: {}".format(data.get('name'), data.get("address"), data.get("block_name"), data.get("fee_type"), data.get("center_id"))
+      # available_capacity_dose1 => For 1st dose alert
+      # available_capacity_dose2 => For 2nd dose alert
+      if session.get("min_age_limit") == min_age_limit and session.get("available_capacity_dose1") > 1:
+        session_data = "Vaccine available :: {}\nDate :: {}\nCapacity :: {}".format(session.get("vaccine"), session.get("date"), session.get('available_capacity_dose1'))
+        slots = ', '.join(session.get('slots'))
+        session_data += "\nSession id: {}\nSlots :: {}".format(session.get('session_id'), slots)
+        available_slots.append("{}\n{}".format(center_details, session_data))
+
+  return available_slots
+
 available_slots = list()
-for data in centers:
-  if data.get("center_id") in ignore_centers:
-    continue;
-  if len(preferred_centers) > 0 and data.get("center_id") not in preferred_centers:
-    continue;
-  for session in data.get("sessions"):
-    center_details = "{}, {}, {}, {}\nCenter id :: {}".format(data.get('name'), data.get("address"), data.get("block_name"), data.get("fee_type"), data.get("center_id"))
-    # available_capacity_dose1 => For 1st dose alert
-    # available_capacity_dose2 => For 2nd dose alert
-    if session.get("min_age_limit") == min_age_limit and session.get("available_capacity_dose1") > 1:
-      session_data = "Vaccine available :: {}\nDate :: {}\nCapacity :: {}".format(session.get("vaccine"), session.get("date"), session.get('available_capacity_dose1'))
-      slots = ', '.join(session.get('slots'))
-      session_data += "\nSession id: {}\nSlots :: {}".format(session.get('session_id'), slots)
-      available_slots.append("{}\n{}".format(center_details, session_data))
+available_slots += get_available_slots(datetime.datetime.today().strftime('%d-%m-%Y'))
+available_slots += get_available_slots((datetime.datetime.today() + datetime.timedelta(days=7)).strftime('%d-%m-%Y'))
 
 f = open("available_slots.txt", "w")
 if len(available_slots) > 0:
@@ -96,7 +103,6 @@ if len(available_slots) > 0:
     f.write(slot_details)
     f.write("\n\n")
 
-    # send alert on the iOS
     notify(title    = 'CoWIN slot available',
        subtitle = "",
        message  = slot_details.replace("\n", " | "))
