@@ -1,10 +1,14 @@
 *********************************************************************************
 
-Pre-requisite:
+***Pre-requisite:***
 
 python should be installed
 
-For iOS users:
+**For linux users:**
+
+gnome-terminal
+
+**For iOS users:**
 
 Install iTerm, terminal-notifier
 
@@ -19,7 +23,7 @@ Command to install terminal-notifier:
 
 *********************************************************************************
 
-Configure:
+**How to configure:**
 
 Download the `CoWIN_Booking` repository.
 
@@ -43,7 +47,7 @@ Errors can be checked in the `issues.txt` file
 
 *********************************************************************************
 
-How this works:
+**How this works:**
 
 This will create an alert as soon as the slot gets available for booking and checks for available slots every minute.
 Once the slot is available, it will open the terminal for you.
@@ -52,7 +56,7 @@ Follow the steps shared on how to book the slot. Your slot will get booked.
 
 *********************************************************************************
 
-How to book the slot:
+**How to book the slot:**
 
 Generate the token and captcha required while booking the slot.
 Run the following command:
@@ -71,7 +75,7 @@ Note: You can create an alias to execute these scripts for quick response
 
 *********************************************************************************
 
-How to cancel my booking:
+**How to cancel my booking:**
 
 Update the appointment_id in the `cancel_slot.py` and run the following command:
 
