@@ -1,8 +1,12 @@
 *********************************************************************************
 
-***Pre-requisite:***
+***Requirements:***
 
-python should be installed
+python
+
+Python Dependencies:
+
+twilio
 
 **For linux users:**
 
@@ -26,6 +30,10 @@ Command to install terminal-notifier:
 **How to configure:**
 
 Download the `CoWIN_Booking` repository.
+
+Configure twilio account to integrate whatsapp notification:
+
+https://www.twilio.com/blog/send-whatsapp-message-30-seconds-python#:~:text=The%20above%20code%20imports%20the,sandbox%20to%20test%20it%20out
 
 Update the scripts with the expected details, like the mobile number, pincode, preferred centers, min_age_limit, etc
 
@@ -90,3 +98,5 @@ https://apisetu.gov.in/public/marketplace/api/cowin/
 https://stackoverflow.com/questions/17651017/python-post-osx-notification
 
 https://stackoverflow.com/questions/58844669/trying-to-run-a-python-script-with-cron-getting-errno-1-operation-not-permitt
+
+https://www.twilio.com/blog/send-whatsapp-message-30-seconds-python#:~:text=The%20above%20code%20imports%20the,sandbox%20to%20test%20it%20out.
