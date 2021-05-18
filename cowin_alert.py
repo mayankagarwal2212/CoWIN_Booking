@@ -26,8 +26,13 @@ def notify(title, subtitle, message):
 
 today=datetime.today().strftime('%d-%m-%Y')
 
+# Search by PIN
 # update the pincode in the url
-url = "https://cdn-api.co-vin.in/api/v2/appointment/sessions/public/calendarByPin?pincode=826001&date={}".format(today)
+url = "https://cdn-api.co-vin.in/api/v2/appointment/sessions/public/calendarByPin?pincode=814146&date={}".format(today)
+
+# To search by District
+# update the district id in the url
+# url = "Request URL: https://cdn-api.co-vin.in/api/v2/appointment/sessions/public/calendarByDistrict?district_id=257&date={}".format(today)
 
 payload={}
 headers = {
@@ -53,6 +58,8 @@ if response.status_code != 200:
 response_data = json.loads(response._content)
 
 # age limit preference for alert
+# for 45*, min_age_limit = 45
+# for 18*, min_age_limit = 18
 min_age_limit = 18
 centers = response_data.get('centers')
 
@@ -73,6 +80,8 @@ for data in centers:
     continue;
   for session in data.get("sessions"):
     center_details = "{}, {}, {}, {}\nCenter id :: {}".format(data.get('name'), data.get("address"), data.get("block_name"), data.get("fee_type"), data.get("center_id"))
+    # available_capacity_dose1 => For 1st dose alert
+    # available_capacity_dose2 => For 2nd dose alert
     if session.get("min_age_limit") == min_age_limit and session.get("available_capacity_dose1") > 1:
       session_data = "Vaccine available :: {}\nDate :: {}\nCapacity :: {}".format(session.get("vaccine"), session.get("date"), session.get('available_capacity_dose1'))
       slots = ', '.join(session.get('slots'))
