@@ -28,7 +28,7 @@ today=datetime.today().strftime('%d-%m-%Y')
 
 # Search by PIN
 # update the pincode in the url
-url = "https://cdn-api.co-vin.in/api/v2/appointment/sessions/public/calendarByPin?pincode=814146&date={}".format(today)
+url = "https://cdn-api.co-vin.in/api/v2/appointment/sessions/public/calendarByPin?pincode=826001&date={}".format(today)
 
 # To search by District
 # update the district id in the url
@@ -99,7 +99,7 @@ if len(available_slots) > 0:
     # send alert on the iOS
     notify(title    = 'CoWIN slot available',
        subtitle = "",
-       message  = slot_details)
+       message  = slot_details.replace("\n", " | "))
 
   # for iOS systems
   if check_os() == 2:
