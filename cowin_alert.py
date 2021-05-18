@@ -3,6 +3,7 @@
 import requests, json, os
 from sys import platform
 import datetime
+from twilio.rest import Client
 
 def check_os():
   if platform == "linux" or platform == "linux2":
@@ -23,7 +24,6 @@ def notify(title, subtitle, message):
     # for linux based systems
     else:
       os.system("notify-send Vaccine-Slot-Available '{}'".format(message))
-
 
 def get_available_slots(today):
 
@@ -91,10 +91,29 @@ def get_available_slots(today):
 
   return available_slots
 
+def send_whatsapp_notification(message):
+  # Register in twilio and update the SID and token
+  # Reference: https://www.twilio.com/blog/send-whatsapp-message-30-seconds-python#:~:text=The%20above%20code%20imports%20the,sandbox%20to%20test%20it%20out.
+
+  account_sid = "XXXXXXXXXXXXXXXXXXXXXXXXXXXX"
+  auth_token = "XXXXXXXXXXXXXXXXXXXXXXXXXXXX"
+
+  client = Client(account_sid, auth_token)
+  # this is the Twilio sandbox testing number
+  from_whatsapp_number='whatsapp:+141XXXXXXXX'
+  # replace this number with your own WhatsApp Messaging number
+  to_whatsapp_number='whatsapp:+91810XXXXXX'
+
+  client.messages.create(body=message,
+                         from_=from_whatsapp_number,
+                         to=to_whatsapp_number)
+
 available_slots = list()
 available_slots += get_available_slots(datetime.datetime.today().strftime('%d-%m-%Y'))
 available_slots += get_available_slots((datetime.datetime.today() + datetime.timedelta(days=7)).strftime('%d-%m-%Y'))
 
+# enable this once the twilio account is configured
+send_whatsapp_alert = False
 f = open("available_slots.txt", "w")
 if len(available_slots) > 0:
   # to open iterm in the iOS
@@ -103,9 +122,13 @@ if len(available_slots) > 0:
     f.write(slot_details)
     f.write("\n\n")
 
+    alert_message = slot_details.replace("\n", " | ")
     notify(title    = 'CoWIN slot available',
        subtitle = "",
-       message  = slot_details.replace("\n", " | "))
+       message  = alert_message)
+
+    if send_whatsapp_alert:
+      send_whatsapp_notification(alert_message)
 
   # for iOS systems
   if check_os() == 2:
