@@ -7,6 +7,7 @@ python
 Python Dependencies:
 
 twilio
+requests
 
 **For linux users:**
 
