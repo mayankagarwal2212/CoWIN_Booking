@@ -3,9 +3,9 @@
 import requests, json, os
 from sys import platform
 import datetime
-# uncomment this if whatsapp notification enabled
+# uncomment below if whatsapp notification enabled
 # from twilio.rest import Client
-# uncomment this for windows user
+# uncomment below for windows 10 user
 # from win10toast import ToastNotifier
 
 def check_os():
@@ -28,7 +28,7 @@ def notify(title, subtitle, message):
     # for linux based systems
     elif os_type == 1:
       os.system("notify-send Vaccine-Slot-Available '{}'".format(message))
-    # uncomment this for windows user
+    # uncomment below for windows user
     # else:
     #   toaster = ToastNotifier()
     #   toaster.show_toast(title, message)
@@ -99,7 +99,7 @@ def get_available_slots(today):
 
   return available_slots
 
-# uncomment this if whatsapp notification enabled
+# uncomment below method if whatsapp notification enabled
 
 # def send_whatsapp_notification(message):
 #   # Register in twilio and update the SID and token
@@ -137,7 +137,7 @@ if len(available_slots) > 0:
        subtitle = "",
        message  = alert_message)
 
-    # uncomment this if whatsapp notification enabled
+    # uncomment below if whatsapp notification enabled
     # if send_whatsapp_alert:
     #   send_whatsapp_notification(alert_message)
 
