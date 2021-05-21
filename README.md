@@ -11,7 +11,7 @@ requests (pip install requests)
 
 **For Windows 10 user:**
 
-pip install win10toast
+win10toast (pip install win10toast)
 
 Note: Make sure to start a fresh terminal
 
