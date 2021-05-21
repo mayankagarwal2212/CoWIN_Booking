@@ -3,7 +3,10 @@
 import requests, json, os
 from sys import platform
 import datetime
-from twilio.rest import Client
+# uncomment this if whatsapp notification enabled
+# from twilio.rest import Client
+# uncomment this for windows user
+# from win10toast import ToastNotifier
 
 def check_os():
   if platform == "linux" or platform == "linux2":
@@ -18,12 +21,17 @@ def notify(title, subtitle, message):
     t = '-title {!r}'.format(title)
     s = '-subtitle {!r}'.format(subtitle)
     m = '-message {!r}'.format(message)
-    # for iOS systems
-    if check_os() == 2:
+
+    os_type = check_os()
+    if os_type == 2:
       os.system('/usr/local/bin/terminal-notifier {}'.format(' '.join([m, t, s])))
     # for linux based systems
-    else:
+    elif os_type == 1:
       os.system("notify-send Vaccine-Slot-Available '{}'".format(message))
+    # uncomment this for windows user
+    # else:
+    #   toaster = ToastNotifier()
+    #   toaster.show_toast(title, message)
 
 def get_available_slots(today):
 
@@ -91,22 +99,24 @@ def get_available_slots(today):
 
   return available_slots
 
-def send_whatsapp_notification(message):
-  # Register in twilio and update the SID and token
-  # Reference: https://www.twilio.com/blog/send-whatsapp-message-30-seconds-python#:~:text=The%20above%20code%20imports%20the,sandbox%20to%20test%20it%20out.
+# uncomment this if whatsapp notification enabled
 
-  account_sid = "XXXXXXXXXXXXXXXXXXXXXXXXXXXX"
-  auth_token = "XXXXXXXXXXXXXXXXXXXXXXXXXXXX"
+# def send_whatsapp_notification(message):
+#   # Register in twilio and update the SID and token
+#   # Reference: https://www.twilio.com/blog/send-whatsapp-message-30-seconds-python#:~:text=The%20above%20code%20imports%20the,sandbox%20to%20test%20it%20out.
 
-  client = Client(account_sid, auth_token)
-  # this is the Twilio sandbox testing number
-  from_whatsapp_number='whatsapp:+141XXXXXXXX'
-  # replace this number with your own WhatsApp Messaging number
-  to_whatsapp_number='whatsapp:+91810XXXXXX'
+#   account_sid = "XXXXXXXXXXXXXXXXXXXXXXXXXXXX"
+#   auth_token = "XXXXXXXXXXXXXXXXXXXXXXXXXXXX"
 
-  client.messages.create(body=message,
-                         from_=from_whatsapp_number,
-                         to=to_whatsapp_number)
+#   client = Client(account_sid, auth_token)
+#   # this is the Twilio sandbox testing number
+#   from_whatsapp_number='whatsapp:+141XXXXXXXX'
+#   # replace this number with your own WhatsApp Messaging number
+#   to_whatsapp_number='whatsapp:+91810XXXXXX'
+
+#   client.messages.create(body=message,
+#                          from_=from_whatsapp_number,
+#                          to=to_whatsapp_number)
 
 available_slots = list()
 available_slots += get_available_slots(datetime.datetime.today().strftime('%d-%m-%Y'))
@@ -127,8 +137,9 @@ if len(available_slots) > 0:
        subtitle = "",
        message  = alert_message)
 
-    if send_whatsapp_alert:
-      send_whatsapp_notification(alert_message)
+    # uncomment this if whatsapp notification enabled
+    # if send_whatsapp_alert:
+    #   send_whatsapp_notification(alert_message)
 
   # for iOS systems
   if check_os() == 2:
