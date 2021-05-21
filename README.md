@@ -2,12 +2,18 @@
 
 ***Requirements:***
 
-python
+python, pip
 
 Python Dependencies:
 
-twilio
-requests
+twilio (pip install twilio)
+requests (pip install requests)
+
+**For Windows 10 user:**
+
+pip install win10toast
+
+Note: Make sure to start a fresh terminal
 
 **For linux users:**
 
@@ -100,4 +106,6 @@ https://stackoverflow.com/questions/17651017/python-post-osx-notification
 
 https://stackoverflow.com/questions/58844669/trying-to-run-a-python-script-with-cron-getting-errno-1-operation-not-permitt
 
-https://www.twilio.com/blog/send-whatsapp-message-30-seconds-python#:~:text=The%20above%20code%20imports%20the,sandbox%20to%20test%20it%20out.
+https://www.twilio.com/blog/send-whatsapp-message-30-seconds-python#:~:text=The%20above%20code%20imports%20the,sandbox%20to%20test%20it%20out
+
+https://towardsdatascience.com/how-to-make-windows-10-toast-notifications-with-python-fb3c27ae45b9
