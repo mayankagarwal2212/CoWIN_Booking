@@ -39,6 +39,7 @@ Update the scripts with the expected details, like the mobile number, pincode, p
 
 Update the absolute path to this folder in the scripts.
 
+Then,
 ```
 Update the file `cowin_alert.bat` and update the python path and the path of `cowin_alert.py` file.
 Now, add a new scheduler to run this every 5 minutes. To add this scheduler, execute the following steps:
