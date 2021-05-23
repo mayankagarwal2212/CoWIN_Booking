@@ -12,7 +12,7 @@ def encrypt_string(hash_string):
 conn = http.client.HTTPSConnection("cdn-api.co-vin.in")
 url = "https://cdn-api.co-vin.in/api/v2/auth/generateMobileOTP"
 # update the mobile number
-mobile_number = 9999999999
+mobile_number = 8102502220
 
 payload = json.dumps({
   "secret": "U2FsdGVkX18NuNa/jso3AJbIkh1Rf6DDBC58kOBELnGJA58OH/R5EKIz6hrONnCg2kTB8ktbqt0gyJ9aCKyWFw==",

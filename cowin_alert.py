@@ -1,9 +1,8 @@
 #!/usr/bin/python
 
-import json, os
+import json, os, http.client, csv, datetime
 from sys import platform
-import datetime
-import http.client
+from collections import OrderedDict
 
 # uncomment below if whatsapp notification enabled
 # from twilio.rest import Client
@@ -58,8 +57,9 @@ def get_available_slots(today):
   }
 
   # Search by PIN
-  # update the pincode in the url
-  conn.request("GET", "/api/v2/appointment/sessions/public/calendarByPin?pincode=826001&date={}".format(today), payload, headers)
+  # update the pincode
+  pincode = 826001
+  conn.request("GET", "/api/v2/appointment/sessions/public/calendarByPin?pincode={}&date={}".format(pincode, today), payload, headers)
 
   # To search by District
   # update the district id in the url
@@ -96,14 +96,24 @@ def get_available_slots(today):
     if len(preferred_centers) > 0 and data.get("center_id") not in preferred_centers:
       continue;
     for session in data.get("sessions"):
-      center_details = "{}, {}, {}, {}\nCenter id :: {}".format(data.get('name'), data.get("address"), data.get("block_name"), data.get("fee_type"), data.get("center_id"))
       # available_capacity_dose1 => For 1st dose alert
       # available_capacity_dose2 => For 2nd dose alert
       if session.get("min_age_limit") == min_age_limit and session.get("available_capacity_dose1") > 1:
-        session_data = "Vaccine available :: {}\nDate :: {}\nCapacity :: {}".format(session.get("vaccine"), session.get("date"), session.get('available_capacity_dose1'))
-        slots = ', '.join(session.get('slots'))
-        session_data += "\nSession id: {}\nSlots :: {}".format(session.get('session_id'), slots)
-        available_slots.append("{}\n{}".format(center_details, session_data))
+        for slot in session.get('slots'):
+          slot_info = OrderedDict()
+          slot_info['Book This'] = ''
+          slot_info['Captcha'] = ''
+          slot_info['Center Name'] = data.get("name")
+          slot_info['Center Address'] = data.get("address")
+          slot_info['Block Name'] = data.get("block_name")
+          slot_info['Vaccine'] = session.get("vaccine")
+          slot_info['Date'] = session.get("date")
+          slot_info['Slot'] = slot
+          slot_info['Fee Type'] = data.get("fee_type")
+          slot_info['Doses'] = session.get('available_capacity_dose1')
+          slot_info['Center ID'] = data.get("center_id")
+          slot_info['Session Id'] = session.get('session_id')
+          available_slots.append(slot_info)
 
   return available_slots
 
@@ -132,25 +142,27 @@ available_slots += get_available_slots((datetime.datetime.today() + datetime.tim
 
 # enable this once the twilio account is configured
 send_whatsapp_alert = False
-f = open("available_slots.txt", "w")
+
+f = open('available_slots.csv', "w")
+
 if len(available_slots) > 0:
-  # to open iterm in the iOS
-  f.write("\n")
-  for slot_details in available_slots:
-    f.write(slot_details)
-    f.write("\n\n")
+    headers = list(available_slots[0].keys())
 
-    alert_message = slot_details.replace("\n", " | ")
-    notify(title='CoWIN slot available', message=alert_message)
+    dict_writer = csv.DictWriter(f, headers)
+    dict_writer.writeheader()
+    dict_writer.writerows(available_slots)
 
-    # uncomment below if whatsapp notification enabled
-    # if send_whatsapp_alert:
-    #   send_whatsapp_notification(alert_message)
+    # sent alert to user
+    for slot_info in available_slots:
+      alert_message = ""
+      slot_info.pop("Book This", None)
+      slot_info.pop("Captcha", None)
+      for key, value in slot_info.items():
+        alert_message += "{}: {} | ".format(key, value)
+      notify(title='CoWIN slot available', message=alert_message)
 
-  # for iOS systems
-  if check_os() == 2:
-    os.system("open -a iTerm .")
-  else:
-    os.system("gnome-terminal")
+      # uncomment below if whatsapp notification enabled
+      # if send_whatsapp_alert:
+      #   send_whatsapp_notification(alert_message)
 
 f.close()

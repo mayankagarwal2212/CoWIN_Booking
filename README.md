@@ -7,7 +7,7 @@ python, pip
 Python Dependencies:
 
 twilio (pip install twilio)
-requests (pip install requests)
+CairoSVG (pip install CairoSVG)
 
 **For Windows 10 user:**
 
@@ -20,8 +20,6 @@ Note: Make sure to start a fresh terminal
 gnome-terminal
 
 **For iOS users:**
-
-Install iTerm
 
 Make sure that the permission is configured. Allow full disk access permission to the following:
 
@@ -62,9 +60,7 @@ Errors can be checked in the `issues.txt` file
 **How this works:**
 
 This will create an alert as soon as the slot gets available for booking and checks for available slots every minute.
-Once the slot is available, it will open the terminal for you.
-
-Follow the steps shared on how to book the slot. Your slot will get booked.
+Once the slot is available, open a new terminal and follow the steps shared on how to book the slot. Your slot will get booked.
 
 *********************************************************************************
 
@@ -77,7 +73,7 @@ Run the following command:
 
 When prompted, enter the otp received in the provided mobile number. This will generate a fresh token and the captcha.
 
-Update the session_id, center_id, slot from the `available_slots.txt` file based on your preference. If you are aware of the center and waiting for the slot to open, you can update the script `generate_token.py` and generate the alert for this one only. One can merge the two scripts in this case.
+Open the file `available_slots.csv` and update the columns `Book This` to 1 and enter the captcha in the `Captcha` column
 
 Now, run `python book_slot.py`
 

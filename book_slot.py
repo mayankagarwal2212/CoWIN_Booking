@@ -1,27 +1,30 @@
 #!/usr/bin/env python
 
-import json
-import http.client
+import csv, json, http.client
 
 conn = http.client.HTTPSConnection("cdn-api.co-vin.in")
 
-# Get the session and center details from the available_slots.txt file
-center_id = 701792
-session_id = "0edb6bde-a57c-4b42-9dd4-85f177183c47"
-slot_time = "10:00AM-11:00AM"
-captcha = "7Rp2k"
+booked_slot = dict()
+reader = csv.DictReader(open('available_slots.csv', 'r'))
+for slot_info in reader:
+  if slot_info.get('Book This') == '1':
+    booked_slot = slot_info
 
-# beneficiary list for booking the slot. This can be fetched from the beneficiaries
+if not booked_slot:
+  print("No slot selected. Please enter 1 for the selected slot in the \"Book This\" column of available_slots.csv file. Also make sure to add captcha in the captcha column")
+  raise Exception("No slot selected")
+
+# beneficiary list for booking the slot. This is the reference id of the user
 beneficiaries = [
   # "28979499715650",
 ]
 
-# In case, aware of the center for booking and waiting for the session to open
+# Get the session and center details from the available_slots.csv file
 payload = json.dumps({
-  "center_id": center_id,
-  "session_id": session_id,
-  "slot": slot_time,
-  "captcha": captcha,
+  "center_id": int(booked_slot.get('Center ID')),
+  "session_id": booked_slot.get('Session Id'),
+  "slot": booked_slot.get('Slot'),
+  "captcha": booked_slot.get('Captcha'),
   "beneficiaries": beneficiaries,
   # update this to 2 if its for the second dose
   "dose": 1

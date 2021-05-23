@@ -8,7 +8,7 @@ conn = http.client.HTTPSConnection("cdn-api.co-vin.in")
 
 # update the appointment id
 appointment_id = "5b124e0a-245e-41e4-915c-89eb3e0f3eed"
-# beneficiary list for booking the slot. This can be fetched from the beneficiaries
+# beneficiary list for booking the slot. This is the reference id of the user
 beneficiaries = [
   # "28979499715650",
 ]
