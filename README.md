@@ -1,6 +1,7 @@
 
 # Requirements
 
+```
 python, pip
 
 Python Dependencies:
@@ -8,6 +9,7 @@ Python Dependencies:
 twilio (pip install twilio) => Only if you want to integrate whatsapp notification
 
 CairoSVG (pip install CairoSVG)
+```
 
 **For Windows 10 user:**
 
@@ -33,21 +35,39 @@ https://www.twilio.com/blog/send-whatsapp-message-30-seconds-python#:~:text=The%
 
 Update the scripts with the expected details, like the mobile number, pincode, preferred centers, min_age_limit, etc
 
+**For Windows user:**
+
+```
+Update the file `cowin_alert.bat` and update the python path and the path of `cowin_alert.py` file.
+Now, add a new scheduler to run this every 5 minutes. To add this scheduler, execute the following steps:
+
+Open Windows >> Task Scheduler
+Create Task
+In the general tab, add the task name. Click the checkbox "run with highest privileges".
+
+In the Triggers tab >> Begin the task, select creation/update of this aciton.
+Execute this task daily and repeat task every 5 minutes. (Or preferred interval)
+Keep the trigger enabled.
+
+In the actions tab, select action as "Start a program".
+In the script path, add the cowin_alert.bat file.
+
+Click on OK button and the scheduler is created
+```
+
+**For other users:**
+
+```
 Add the crontab to execute this every minute:
-
 Open terminal
-
 Enter the command `crontab -e`
-
 This will open a file in the editor. Edit this and add the following:
-
 `*/1 * * * * cd <path-to-this-directory> && /usr/bin/python cowin_alert.py >> <path-to-this-directory>/issues.txt 2>&1`
 
-Here,
-
-`/usr/bin/python` : This is the path to the directory for python. Update this based on the the configured path
+Here, `/usr/bin/python` : This is the path to the directory for python. Update this based on the the configured path
 
 Errors can be checked in the `issues.txt` file
+```
 
 # How this works
 
@@ -89,3 +109,7 @@ https://stackoverflow.com/questions/58844669/trying-to-run-a-python-script-with-
 https://www.twilio.com/blog/send-whatsapp-message-30-seconds-python#:~:text=The%20above%20code%20imports%20the,sandbox%20to%20test%20it%20out
 
 https://towardsdatascience.com/how-to-make-windows-10-toast-notifications-with-python-fb3c27ae45b9
+
+https://stackoverflow.com/questions/23708898/pip-is-not-recognized-as-an-internal-or-external-command
+
+https://www.winhelponline.com/blog/run-bat-files-invisibly-without-displaying-command-prompt/
