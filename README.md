@@ -15,10 +15,6 @@ win10toast (pip install win10toast)
 
 Note: Make sure to start a fresh terminal
 
-**For linux users:**
-
-gnome-terminal
-
 **For iOS users:**
 
 Make sure that the permission is configured. Allow full disk access permission to the following:
