@@ -20,7 +20,7 @@ beneficiaries = [
 ]
 
 # Get the session and center details from the available_slots.csv file
-payload = json.dumps({
+request_data = {
   "center_id": int(booked_slot.get('Center ID')),
   "session_id": booked_slot.get('Session Id'),
   "slot": booked_slot.get('Slot'),
@@ -28,7 +28,11 @@ payload = json.dumps({
   "beneficiaries": beneficiaries,
   # update this to 2 if its for the second dose
   "dose": 1
-})
+}
+payload = json.dumps(request_data)
+
+print("Booking slot ::")
+print(json.dumps(request_data, indent=4))
 
 with open("token.txt") as f:
     content = f.readlines()
