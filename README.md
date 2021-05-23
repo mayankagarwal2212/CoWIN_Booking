@@ -25,7 +25,7 @@ Make sure that the permission is configured. Allow full disk access permission t
 
 zsh, python, cron
 
-Check this on how to add permission: https://stackoverflow.com/questions/58844669/trying-to-run-a-python-script-with-cron-getting-errno-1-operation-not-permitt
+How to add permission: https://stackoverflow.com/questions/58844669/trying-to-run-a-python-script-with-cron-getting-errno-1-operation-not-permitt
 
 *********************************************************************************
 
