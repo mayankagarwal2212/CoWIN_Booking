@@ -7,8 +7,6 @@ python, pip
 Python Dependencies:
 
 twilio (pip install twilio) => Only if you want to integrate whatsapp notification
-
-CairoSVG (pip install CairoSVG)
 ```
 
 **For Windows 10 user:**
