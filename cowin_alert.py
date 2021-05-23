@@ -1,8 +1,9 @@
 #!/usr/bin/python
 
-import requests, json, os
+import json, os
 from sys import platform
 import datetime
+import http.client
 
 # uncomment below if whatsapp notification enabled
 # from twilio.rest import Client
@@ -19,15 +20,11 @@ def check_os():
     return 3
 
 # The notifier function
-def notify(title, subtitle, message):
-    t = '-title {!r}'.format(title)
-    s = '-subtitle {!r}'.format(subtitle)
-    m = '-message {!r}'.format(message)
+def notify(title, message):
 
     os_type = check_os()
     if os_type == 2:
       os.system("osascript -e 'display notification \"{}\" with title \"{}\" sound name \"default\"'".format(message, title))
-      # os.system('/usr/local/bin/terminal-notifier {}'.format(' '.join([m, t, s])))
     # for linux based systems
     elif os_type == 1:
       os.system("notify-send Vaccine-Slot-Available '{}'".format(message))
@@ -39,15 +36,13 @@ def notify(title, subtitle, message):
 def get_available_slots(today):
 
   available_slots = list()
-  # Search by PIN
-  # update the pincode in the url
-  url = "https://cdn-api.co-vin.in/api/v2/appointment/sessions/public/calendarByPin?pincode=826001&date={}".format(today)
 
   # To search by District
   # update the district id in the url
   # url = "Request URL: https://cdn-api.co-vin.in/api/v2/appointment/sessions/public/calendarByDistrict?district_id=257&date={}".format(today)
 
-  payload={}
+  conn = http.client.HTTPSConnection("cdn-api.co-vin.in")
+  payload = ''
   headers = {
     'authority': 'cdn-api.co-vin.in',
     'sec-ch-ua': '" Not A;Brand";v="99", "Chromium";v="90", "Google Chrome";v="90"',
@@ -62,13 +57,23 @@ def get_available_slots(today):
     'accept-language': 'en-IN,en;q=0.9,hi-IN;q=0.8,hi;q=0.7,en-GB;q=0.6,en-US;q=0.5'
   }
 
-  response = requests.request("GET", url, headers=headers, data=payload)
+  # Search by PIN
+  # update the pincode in the url
+  conn.request("GET", "/api/v2/appointment/sessions/public/calendarByPin?pincode=826001&date={}".format(today), payload, headers)
 
-  if response.status_code != 200:
-    print("Exception raised :: {}".format(response._content))
-    raise Exception(response)
+  # To search by District
+  # update the district id in the url
+  # url = "Request URL: https://cdn-api.co-vin.in/api/v2/appointment/sessions/public/calendarByDistrict?district_id=257&date={}".format(today)
+  # conn.request("GET", "/api/v2/appointment/sessions/public/calendarByDistrict?district_id=257&date={}".format(today), payload, headers)
 
-  response_data = json.loads(response._content)
+  res = conn.getresponse()
+
+  if res.status != 200:
+    print("Exception raised :: {}".format(res.status))
+    raise Exception(res)
+
+  data = res.read()
+  response_data = json.loads(data)
 
   # age limit preference for alert
   # for 45*, min_age_limit = 45
@@ -136,9 +141,7 @@ if len(available_slots) > 0:
     f.write("\n\n")
 
     alert_message = slot_details.replace("\n", " | ")
-    notify(title    = 'CoWIN slot available',
-       subtitle = "",
-       message  = alert_message)
+    notify(title='CoWIN slot available', message=alert_message)
 
     # uncomment below if whatsapp notification enabled
     # if send_whatsapp_alert:
