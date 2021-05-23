@@ -1,9 +1,10 @@
 #!/usr/bin/env python
 
-import requests
 import json
+import http.client
 
 url = "https://cdn-api.co-vin.in/api/v2/appointment/cancel"
+conn = http.client.HTTPSConnection("cdn-api.co-vin.in")
 
 # update the appointment id
 appointment_id = "5b124e0a-245e-41e4-915c-89eb3e0f3eed"
@@ -31,5 +32,8 @@ headers = {
   'Content-Type': 'application/json'
 }
 
-response = requests.request("POST", url, headers=headers, data=payload)
-print(response.text)
+conn.request("POST", "/api/v2/appointment/cancel", payload, headers)
+resp = conn.getresponse()
+data = resp.read()
+response_data = json.loads(data)
+print(response_data)
