@@ -21,16 +21,13 @@ gnome-terminal
 
 **For iOS users:**
 
-Install iTerm, terminal-notifier
+Install iTerm
 
 Make sure that the permission is configured. Allow full disk access permission to the following:
 
 zsh, python, cron
 
-Check this for more details: https://stackoverflow.com/questions/58844669/trying-to-run-a-python-script-with-cron-getting-errno-1-operation-not-permitt
-
-Command to install terminal-notifier:
-`gem install terminal-notifier`
+Check this on how to add permission: https://stackoverflow.com/questions/58844669/trying-to-run-a-python-script-with-cron-getting-errno-1-operation-not-permitt
 
 *********************************************************************************
 
