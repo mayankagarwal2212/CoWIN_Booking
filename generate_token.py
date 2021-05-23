@@ -1,6 +1,7 @@
 #!/usr/bin/env python
 
-import hashlib, requests, json, os
+import hashlib, json, os
+import http.client
 
 def encrypt_string(hash_string):
     sha_signature = hashlib.sha256(hash_string.encode()).hexdigest()
@@ -8,13 +9,16 @@ def encrypt_string(hash_string):
 
 # -------------------------Generate OTP----------------------------
 
+conn = http.client.HTTPSConnection("cdn-api.co-vin.in")
 url = "https://cdn-api.co-vin.in/api/v2/auth/generateMobileOTP"
 # update the mobile number
 mobile_number = 9999999999
+
 payload = json.dumps({
   "secret": "U2FsdGVkX18NuNa/jso3AJbIkh1Rf6DDBC58kOBELnGJA58OH/R5EKIz6hrONnCg2kTB8ktbqt0gyJ9aCKyWFw==",
   "mobile": mobile_number
 })
+
 headers = {
   'authority': 'cdn-api.co-vin.in',
   'sec-ch-ua': '" Not A;Brand";v="99", "Chromium";v="90", "Google Chrome";v="90"',
@@ -30,14 +34,17 @@ headers = {
   'accept-language': 'en-IN,en;q=0.9,hi-IN;q=0.8,hi;q=0.7,en-GB;q=0.6,en-US;q=0.5'
 }
 
-resp = requests.request("POST", url, headers=headers, data=payload)
+conn.request("POST", "/api/v2/auth/generateMobileOTP", payload, headers)
 
-if resp.status_code != 200:
-    print('POST API: {} {}, Error message: {}'.format(url, resp.status_code, resp._content))
+resp = conn.getresponse()
+if resp.status != 200:
+    print('Error Generate OTP: {} {}'.format(url, resp.status))
     raise Exception(resp)
-else:
-	print('Txn ID: {}'.format(resp.json()["txnId"]))
-	txnId = resp.json()["txnId"]
+
+data = resp.read()
+response_data = json.loads(data)
+print('Txn ID: {}'.format(response_data["txnId"]))
+txnId = response_data["txnId"]
 
 # # # -------------------------Verify OTP----------------------------
 
@@ -60,9 +67,9 @@ headers = {
   'sec-ch-ua': '" Not A;Brand";v="99", "Chromium";v="90", "Google Chrome";v="90"',
   'accept': 'application/json, text/plain, */*',
   'sec-ch-ua-mobile': '?0',
-  'content-Type': 'application/json',
-  'origin': 'https://selfregistration.cowin.gov.in',
   'user-agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/90.0.4430.212 Safari/537.36',
+  'content-type': 'application/json',
+  'origin': 'https://selfregistration.cowin.gov.in',
   'sec-fetch-site': 'cross-site',
   'sec-fetch-mode': 'cors',
   'sec-fetch-dest': 'empty',
@@ -70,15 +77,18 @@ headers = {
   'accept-language': 'en-IN,en;q=0.9,hi-IN;q=0.8,hi;q=0.7,en-GB;q=0.6,en-US;q=0.5'
 }
 
-response = requests.request("POST", url, headers=headers, data=payload)
-# print(response.text)
+conn.request("POST", "/api/v2/auth/validateMobileOtp", payload, headers)
+resp = conn.getresponse()
 
-if response.status_code != 200:
-    print('POST API: {} {}, Error message: {}'.format(url, response.status_code, response._content))
-    raise Exception(response)
-else:
-	token = response.json()["token"]
-	print(token)
+if resp.status != 200:
+    print('OTP Verification Failed: {} {}'.format(url, resp.status))
+    raise Exception(resp)
+
+data = resp.read()
+response_data = json.loads(data)
+
+token = response_data["token"]
+print(token)
 
 # -------------------------Add token ----------------------------------
 f = open("token.txt", "w")
@@ -106,13 +116,18 @@ headers = {
   'accept-language': 'en-IN,en;q=0.9,hi-IN;q=0.8,hi;q=0.7,en-GB;q=0.6,en-US;q=0.5'
 }
 
-response = requests.request("POST", url, headers=headers, data=payload)
+conn.request("POST", "/api/v2/auth/getRecaptcha", payload, headers)
 
-if response.status_code != 200:
-  print("Exception raised :: {}".format(response._content))
-  raise Exception(response)
+resp = conn.getresponse()
 
-svg_xml = json.loads(response._content)['captcha']
+if resp.status != 200:
+    print('Cannot fetch captcha: {} {}'.format(url, resp.status))
+    raise Exception(resp)
+
+data = resp.read()
+response_data = json.loads(data)
+
+svg_xml = response_data['captcha']
 
 f = open("captcha.svg", "w")
 f.write(svg_xml)
