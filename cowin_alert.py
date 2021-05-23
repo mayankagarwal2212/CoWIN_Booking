@@ -3,8 +3,10 @@
 import requests, json, os
 from sys import platform
 import datetime
+
 # uncomment below if whatsapp notification enabled
 # from twilio.rest import Client
+
 # uncomment below for windows 10 user
 # from win10toast import ToastNotifier
 
@@ -24,7 +26,8 @@ def notify(title, subtitle, message):
 
     os_type = check_os()
     if os_type == 2:
-      os.system('/usr/local/bin/terminal-notifier {}'.format(' '.join([m, t, s])))
+      os.system("osascript -e 'display notification \"{}\" with title \"{}\" sound name \"default\"'".format(message, title))
+      # os.system('/usr/local/bin/terminal-notifier {}'.format(' '.join([m, t, s])))
     # for linux based systems
     elif os_type == 1:
       os.system("notify-send Vaccine-Slot-Available '{}'".format(message))
