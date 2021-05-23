@@ -97,7 +97,7 @@ Update the appointment_id in the `cancel_slot.py` and run the following command:
 
 `python cancel_slot.py`
 
-*********************************************************************************
+**Do share your valuable feedback**
 
 # References
 
