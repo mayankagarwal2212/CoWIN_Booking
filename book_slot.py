@@ -1,14 +1,13 @@
 #!/usr/bin/env python
 
-import requests
 import json
+import http.client
 
-url = "https://cdn-api.co-vin.in/api/v2/appointment/schedule"
+conn = http.client.HTTPSConnection("cdn-api.co-vin.in")
 
 # Get the session and center details from the available_slots.txt file
 center_id = 701792
 session_id = "0edb6bde-a57c-4b42-9dd4-85f177183c47"
-
 slot_time = "10:00AM-11:00AM"
 captcha = "7Rp2k"
 
@@ -16,6 +15,7 @@ captcha = "7Rp2k"
 beneficiaries = [
   # "28979499715650",
 ]
+
 # In case, aware of the center for booking and waiting for the session to open
 payload = json.dumps({
   "center_id": center_id,
@@ -31,6 +31,7 @@ with open("token.txt") as f:
     content = f.readlines()
 
 token = content[0]
+
 headers = {
   'sec-ch-ua': '" Not A;Brand";v="99", "Chromium";v="90", "Google Chrome";v="90"',
   'Accept': 'application/json, text/plain, */*',
@@ -41,5 +42,10 @@ headers = {
   'Content-Type': 'application/json'
 }
 
-response = requests.request("POST", url, headers=headers, data=payload)
-print(response.text)
+conn.request("POST", "/api/v2/appointment/schedule", payload, headers)
+resp = conn.getresponse()
+
+data = resp.read()
+response_data = json.loads(data)
+
+print(response_data)
