@@ -1,11 +1,19 @@
 #!/usr/bin/env python
 
-import hashlib, json, os
-import http.client
+import hashlib, http.client, json, os
+from sys import platform
 
 def encrypt_string(hash_string):
     sha_signature = hashlib.sha256(hash_string.encode()).hexdigest()
     return sha_signature
+
+def check_os():
+  if platform == "linux" or platform == "linux2":
+    return 1
+  elif platform == "darwin":
+    return 2
+  elif platform == "win32":
+    return 3
 
 # -------------------------Generate OTP----------------------------
 
@@ -91,7 +99,12 @@ token = response_data["token"]
 print(token)
 
 # -------------------------Add token ----------------------------------
-f = open("token.txt", "w")
+file_name = "token.txt"
+# for windows os, provide the absolute path
+if check_os() == 3:
+  file_name = 'C:\\Users\\HP\\Documents\\CoWIN_Booking\\token.txt'
+
+f = open(file_name, "w")
 f.write(token)
 f.close()
 
@@ -129,9 +142,13 @@ response_data = json.loads(data)
 
 svg_xml = response_data['captcha']
 
-f = open("captcha.svg", "w")
+file_name = "captcha.svg"
+if check_os() == 3:
+  file_name = 'C:\\Users\\HP\\Documents\\CoWIN_Booking\\captcha.svg'
+
+f = open(file_name, "w")
 f.write(svg_xml)
 f.close()
 
-os.system("cairosvg captcha.svg -o captcha.png")
-os.remove("captcha.svg")
+# os.system("cairosvg captcha.svg -o captcha.png")
+# os.remove("captcha.svg")

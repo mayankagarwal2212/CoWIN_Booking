@@ -69,7 +69,7 @@ def get_available_slots(today):
   res = conn.getresponse()
 
   if res.status != 200:
-    print("Exception raised :: {}".format(res.status))
+    print("Exception raised :: {}, reason :: {}".format(res.status, res.reason))
     raise Exception(res)
 
   data = res.read()
@@ -143,7 +143,12 @@ available_slots += get_available_slots((datetime.datetime.today() + datetime.tim
 # enable this once the twilio account is configured
 send_whatsapp_alert = False
 
-f = open('available_slots.csv', "w")
+file_name = 'available_slots.csv'
+# for windows os, provide the absolute path
+if check_os() == 3:
+  file_name = 'C:\\Users\\HP\\Documents\\CoWIN_Booking\\available_slots.csv'
+
+f = open(file_name, "w")
 
 if len(available_slots) > 0:
     headers = list(available_slots[0].keys())
