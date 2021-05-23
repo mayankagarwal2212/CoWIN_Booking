@@ -1,12 +1,12 @@
-*********************************************************************************
 
-***Requirements:***
+# Requirements
 
 python, pip
 
 Python Dependencies:
 
-twilio (pip install twilio)
+twilio (pip install twilio) => Only if you want to integrate whatsapp notification
+
 CairoSVG (pip install CairoSVG)
 
 **For Windows 10 user:**
@@ -23,9 +23,7 @@ zsh, python, cron
 
 How to add permission: https://stackoverflow.com/questions/58844669/trying-to-run-a-python-script-with-cron-getting-errno-1-operation-not-permitt
 
-*********************************************************************************
-
-**How to configure:**
+# How to configure
 
 Download the `CoWIN_Booking` repository.
 
@@ -51,16 +49,12 @@ Here,
 
 Errors can be checked in the `issues.txt` file
 
-*********************************************************************************
-
-**How this works:**
+# How this works
 
 This will create an alert as soon as the slot gets available for booking and checks for available slots every minute.
 Once the slot is available, open a new terminal and follow the steps shared on how to book the slot. Your slot will get booked.
 
-*********************************************************************************
-
-**How to book the slot:**
+# How to book the slot
 
 Generate the token and captcha required while booking the slot.
 Run the following command:
@@ -72,14 +66,11 @@ When prompted, enter the otp received in the provided mobile number. This will g
 Open the file `available_slots.csv` and update the columns `Book This` to 1 and enter the captcha in the `Captcha` column
 
 Now, run `python book_slot.py`
-
 Your slot will be booked.
 
 Note: You can create an alias to execute these scripts for quick response
 
-*********************************************************************************
-
-**How to cancel my booking:**
+# How to cancel my booking
 
 Update the appointment_id in the `cancel_slot.py` and run the following command:
 
@@ -87,7 +78,7 @@ Update the appointment_id in the `cancel_slot.py` and run the following command:
 
 *********************************************************************************
 
-References:
+# References
 
 https://apisetu.gov.in/public/marketplace/api/cowin/
 
