@@ -79,8 +79,6 @@ def get_available_slots(today):
       if session.get("min_age_limit") == MIN_AGE_LIMIT and session.get(capacity_key) > 1:
         for slot in session.get('slots'):
           slot_info = OrderedDict()
-          slot_info['Book This'] = ''
-          slot_info['Captcha'] = ''
           slot_info['Center Name'] = data.get("name")
           slot_info['Center Address'] = data.get("address")
           slot_info['Block Name'] = data.get("block_name")
@@ -126,8 +124,6 @@ if len(available_slots) > 0:
     # sent alert to user
     for slot_info in available_slots:
       alert_message = ""
-      slot_info.pop("Book This", None)
-      slot_info.pop("Captcha", None)
       for key, value in slot_info.items():
         alert_message += "{}: {} | ".format(key, value)
       notify(title='CoWIN slot available', message=alert_message)
