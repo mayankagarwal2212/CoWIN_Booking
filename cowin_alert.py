@@ -4,6 +4,8 @@ import json, os, http.client, csv, datetime
 from sys import platform
 from collections import OrderedDict
 
+from variables import *
+
 # uncomment below if whatsapp notification enabled
 # from twilio.rest import Client
 
@@ -56,15 +58,10 @@ def get_available_slots(today):
     'accept-language': 'en-IN,en;q=0.9,hi-IN;q=0.8,hi;q=0.7,en-GB;q=0.6,en-US;q=0.5'
   }
 
-  # Search by PIN
-  # update the pincode
-  pincode = 826001
-  conn.request("GET", "/api/v2/appointment/sessions/public/calendarByPin?pincode={}&date={}".format(pincode, today), payload, headers)
-
-  # To search by District
-  # update the district id in the url
-  # url = "Request URL: https://cdn-api.co-vin.in/api/v2/appointment/sessions/public/calendarByDistrict?district_id=257&date={}".format(today)
-  # conn.request("GET", "/api/v2/appointment/sessions/public/calendarByDistrict?district_id=257&date={}".format(today), payload, headers)
+  if PINCODE:
+    conn.request("GET", "/api/v2/appointment/sessions/public/calendarByPin?pincode={}&date={}".format(PINCODE, today), payload, headers)    
+  else:
+    conn.request("GET", "/api/v2/appointment/sessions/public/calendarByDistrict?district_id={}&date={}".format(DISTRICT_ID, today), payload, headers)
 
   res = conn.getresponse()
 
@@ -75,30 +72,20 @@ def get_available_slots(today):
   data = res.read()
   response_data = json.loads(data)
 
-  # age limit preference for alert
-  # for 45*, min_age_limit = 45
-  # for 18*, min_age_limit = 18
-  min_age_limit = 18
   centers = response_data.get('centers')
 
-  # centers to exclude for alert
-  ignore_centers = [
-    # 701780,
-    # 618194,
-  ]
-  preferred_centers = [
-    # 701780,
-    # 618194,
-  ]
+  if VACCINE_DOSE == 1:
+    capacity_key = 'available_capacity_dose1'
+  else:
+    capacity_key = 'available_capacity_dose2'
+
   for data in centers:
-    if data.get("center_id") in ignore_centers:
+    if data.get("center_id") in CENTERS_TO_IGNORE:
       continue;
-    if len(preferred_centers) > 0 and data.get("center_id") not in preferred_centers:
+    if len(PREFERRED_CENTERS) > 0 and data.get("center_id") not in PREFERRED_CENTERS:
       continue;
     for session in data.get("sessions"):
-      # available_capacity_dose1 => For 1st dose alert
-      # available_capacity_dose2 => For 2nd dose alert
-      if session.get("min_age_limit") == min_age_limit and session.get("available_capacity_dose1") > 1:
+      if session.get("min_age_limit") == MIN_AGE_LIMIT and session.get(capacity_key) > 1:
         for slot in session.get('slots'):
           slot_info = OrderedDict()
           slot_info['Book This'] = ''
@@ -146,7 +133,7 @@ send_whatsapp_alert = False
 file_name = 'available_slots.csv'
 # for windows os, provide the absolute path
 if check_os() == 3:
-  file_name = 'C:\\Users\\HP\\Documents\\CoWIN_Booking\\available_slots.csv'
+  file_name = '{}\\available_slots.csv'.format(WINDOWS_ABSOLUTE_PATH)
 
 f = open(file_name, "w")
 

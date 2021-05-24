@@ -3,6 +3,8 @@
 import csv, json, http.client, os
 from sys import platform
 
+from variables import *
+
 def check_os():
   if platform == "linux" or platform == "linux2":
     return 1
@@ -18,7 +20,7 @@ booked_slot = dict()
 file_name = 'available_slots.csv'
 # for windows os, provide the absolute path
 if check_os() == 3:
-  file_name = 'C:\\Users\\HP\\Documents\\CoWIN_Booking\\available_slots.csv'
+  file_name = '{}\\available_slots.csv'.format(WINDOWS_ABSOLUTE_PATH)
 
 reader = csv.DictReader(open(file_name, 'r'))
 for slot_info in reader:
@@ -29,7 +31,6 @@ if not booked_slot:
   print("No slot selected. Please enter 1 for the selected slot in the \"Book This\" column of available_slots.csv file. Also make sure to add captcha in the captcha column")
   raise Exception("No slot selected")
 
-# beneficiary list for booking the slot. This is the reference id of the user
 beneficiaries = [
   # "28979499715650",
 ]
@@ -40,9 +41,8 @@ request_data = {
   "session_id": booked_slot.get('Session Id'),
   "slot": booked_slot.get('Slot'),
   "captcha": booked_slot.get('Captcha'),
-  "beneficiaries": beneficiaries,
-  # update this to 2 if its for the second dose
-  "dose": 1
+  "beneficiaries": BENEFICIARIES,
+  "dose": VACCINE_DOSE,
 }
 payload = json.dumps(request_data)
 
@@ -52,7 +52,7 @@ print(json.dumps(request_data, indent=4))
 file_name = "token.txt"
 # for windows os, provide the absolute path
 if check_os() == 3:
-  file_name = 'C:\\Users\\HP\\Documents\\CoWIN_Booking\\token.txt'
+  file_name = '{}\\token.txt'.format(WINDOWS_ABSOLUTE_PATH)
 
 with open(file_name) as f:
     content = f.readlines()

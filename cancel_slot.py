@@ -3,22 +3,31 @@
 import json
 import http.client
 
+from variables import *
+
+
+def check_os():
+  if platform == "linux" or platform == "linux2":
+    return 1
+  elif platform == "darwin":
+    return 2
+  elif platform == "win32":
+    return 3
+
 url = "https://cdn-api.co-vin.in/api/v2/appointment/cancel"
 conn = http.client.HTTPSConnection("cdn-api.co-vin.in")
 
-# update the appointment id
-appointment_id = "5b124e0a-245e-41e4-915c-89eb3e0f3eed"
-# beneficiary list for booking the slot. This is the reference id of the user
-beneficiaries = [
-  # "28979499715650",
-]
-
 payload = json.dumps({
-  "appointment_id": appointment_id,
-  "beneficiariesToCancel": beneficiaries
+  "appointment_id": BOOKED_APPOINTMENT_ID,
+  "beneficiariesToCancel": BENEFICIARIES
 })
 
-with open("token.txt") as f:
+file_name = "token.txt"
+# for windows os, provide the absolute path
+if check_os() == 3:
+  file_name = '{}\\token.txt'.format(WINDOWS_ABSOLUTE_PATH)
+
+with open(file_name) as f:
     content = f.readlines()
 
 token = content[0]

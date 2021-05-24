@@ -3,6 +3,8 @@
 import hashlib, http.client, json, os
 from sys import platform
 
+from variables import *
+
 def encrypt_string(hash_string):
     sha_signature = hashlib.sha256(hash_string.encode()).hexdigest()
     return sha_signature
@@ -19,12 +21,10 @@ def check_os():
 
 conn = http.client.HTTPSConnection("cdn-api.co-vin.in")
 url = "https://cdn-api.co-vin.in/api/v2/auth/generateMobileOTP"
-# update the mobile number
-mobile_number = 9999999999
 
 payload = json.dumps({
   "secret": "U2FsdGVkX18NuNa/jso3AJbIkh1Rf6DDBC58kOBELnGJA58OH/R5EKIz6hrONnCg2kTB8ktbqt0gyJ9aCKyWFw==",
-  "mobile": mobile_number
+  "mobile": COWIN_MOBILE_NUMBER,
 })
 
 headers = {
@@ -102,7 +102,7 @@ print(token)
 file_name = "token.txt"
 # for windows os, provide the absolute path
 if check_os() == 3:
-  file_name = 'C:\\Users\\HP\\Documents\\CoWIN_Booking\\token.txt'
+  file_name = '{}\\token.txt'.format(WINDOWS_ABSOLUTE_PATH)
 
 f = open(file_name, "w")
 f.write(token)
@@ -144,7 +144,7 @@ svg_xml = response_data['captcha']
 
 file_name = "captcha.svg"
 if check_os() == 3:
-  file_name = 'C:\\Users\\HP\\Documents\\CoWIN_Booking\\captcha.svg'
+  file_name = '{}\\captcha.svg'.format(WINDOWS_ABSOLUTE_PATH)
 
 f = open(file_name, "w")
 f.write(svg_xml)
