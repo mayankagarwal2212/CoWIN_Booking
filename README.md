@@ -80,14 +80,13 @@ Once the slot is available, open a new terminal and follow the steps shared on h
 Generate the token and captcha required while booking the slot.
 Run the following command:
 
-`python generate_token.py`
+`python book_appointment.py`
 
-When prompted, enter the otp received in the provided mobile number. This will generate a fresh token and the captcha.
+When prompted, enter the otp. This will generate a fresh token and the captcha.
 
-Open the file `available_slots.csv` and update the columns `Book This` to 1 and enter the captcha in the `Captcha` column
+It will now prompt you to choose a slot from the available slots. Enter Y for the selected slot.
 
-Now, run `python book_slot.py`
-Your slot will be booked.
+Now, enter the captcha generated. Your slot will be booked.
 
 Note: You can create an alias to execute these scripts for quick response
 
