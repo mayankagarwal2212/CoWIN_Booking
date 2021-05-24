@@ -31,7 +31,7 @@ Configure twilio account to integrate whatsapp notification:
 
 https://www.twilio.com/blog/send-whatsapp-message-30-seconds-python#:~:text=The%20above%20code%20imports%20the,sandbox%20to%20test%20it%20out
 
-Update the scripts with the expected details, like the mobile number, pincode, preferred centers, min_age_limit, etc
+Update the variables in the `variables.py` file with the expected details, like the mobile number, pincode, preferred centers, min_age_limit, etc
 
 **For Windows user:**
 
