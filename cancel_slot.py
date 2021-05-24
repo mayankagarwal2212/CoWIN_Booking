@@ -2,6 +2,7 @@
 
 import json
 import http.client
+from sys import platform
 
 from variables import *
 
@@ -44,5 +45,4 @@ headers = {
 conn.request("POST", "/api/v2/appointment/cancel", payload, headers)
 resp = conn.getresponse()
 data = resp.read()
-response_data = json.loads(data)
-print(response_data)
+print("Appointment canceled")
