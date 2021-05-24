@@ -35,3 +35,16 @@ BOOKED_APPOINTMENT_ID = ''
 
 # Absolute path to this directory. For windows only
 WINDOWS_ABSOLUTE_PATH = 'C:\\Users\\HP\\Documents\\CoWIN_Booking'
+
+
+# Below settings are required only if you have configured twilio accoutn
+# Reference: https://www.twilio.com/blog/send-whatsapp-message-30-seconds-python#:~:text=The%20above%20code%20imports%20the,sandbox%20to%20test%20it%20out.
+SEND_WHATSAPP_ALERT = False
+TWILIO_ACCOUNT_SID = 'XXXXXXXXXXXXXXXXXXXXXXXXXXXX'
+TWILIO_AUTH_TOKEN = 'XXXXXXXXXXXXXXXXXXXXXXXXXXXX'
+
+# this is the Twilio sandbox testing number
+TWILIO_MOBILE_NUMBER = '+141XXXXXXXX'
+
+# replace this number with your own WhatsApp Messaging number
+TO_WHATSAPP_NUMBER = '+91810XXXXXX'

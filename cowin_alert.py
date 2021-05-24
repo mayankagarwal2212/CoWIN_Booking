@@ -6,12 +6,6 @@ from collections import OrderedDict
 
 from variables import *
 
-# uncomment below if whatsapp notification enabled
-# from twilio.rest import Client
-
-# uncomment below for windows 10 user
-# from win10toast import ToastNotifier
-
 def check_os():
   if platform == "linux" or platform == "linux2":
     return 1
@@ -30,17 +24,14 @@ def notify(title, message):
     elif os_type == 1:
       os.system("notify-send Vaccine-Slot-Available '{}'".format(message))
     # uncomment below for windows user
-    # else:
-    #   toaster = ToastNotifier()
-    #   toaster.show_toast(title, message)
+    else:
+      from win10toast import ToastNotifier
+      toaster = ToastNotifier()
+      toaster.show_toast(title, message)
 
 def get_available_slots(today):
 
   available_slots = list()
-
-  # To search by District
-  # update the district id in the url
-  # url = "Request URL: https://cdn-api.co-vin.in/api/v2/appointment/sessions/public/calendarByDistrict?district_id=257&date={}".format(today)
 
   conn = http.client.HTTPSConnection("cdn-api.co-vin.in")
   payload = ''
@@ -104,34 +95,22 @@ def get_available_slots(today):
 
   return available_slots
 
-# uncomment below method if whatsapp notification enabled
+def send_whatsapp_notification(message):
+  from twilio.rest import Client
 
-# def send_whatsapp_notification(message):
-#   # Register in twilio and update the SID and token
-#   # Reference: https://www.twilio.com/blog/send-whatsapp-message-30-seconds-python#:~:text=The%20above%20code%20imports%20the,sandbox%20to%20test%20it%20out.
+  client = Client(TWILIO_ACCOUNT_SID, TWILIO_AUTH_TOKEN)
+  from_whatsapp_number='whatsapp:{}'.format(TWILIO_MOBILE_NUMBER)
+  to_whatsapp_number='whatsapp:{}'.format(TO_WHATSAPP_NUMBER)
 
-#   account_sid = "XXXXXXXXXXXXXXXXXXXXXXXXXXXX"
-#   auth_token = "XXXXXXXXXXXXXXXXXXXXXXXXXXXX"
-
-#   client = Client(account_sid, auth_token)
-#   # this is the Twilio sandbox testing number
-#   from_whatsapp_number='whatsapp:+141XXXXXXXX'
-#   # replace this number with your own WhatsApp Messaging number
-#   to_whatsapp_number='whatsapp:+91810XXXXXX'
-
-#   client.messages.create(body=message,
-#                          from_=from_whatsapp_number,
-#                          to=to_whatsapp_number)
+  client.messages.create(body=message,
+                         from_=from_whatsapp_number,
+                         to=to_whatsapp_number)
 
 available_slots = list()
 available_slots += get_available_slots(datetime.datetime.today().strftime('%d-%m-%Y'))
 available_slots += get_available_slots((datetime.datetime.today() + datetime.timedelta(days=7)).strftime('%d-%m-%Y'))
 
-# enable this once the twilio account is configured
-send_whatsapp_alert = False
-
 file_name = 'available_slots.csv'
-# for windows os, provide the absolute path
 if check_os() == 3:
   file_name = '{}\\available_slots.csv'.format(WINDOWS_ABSOLUTE_PATH)
 
@@ -153,8 +132,7 @@ if len(available_slots) > 0:
         alert_message += "{}: {} | ".format(key, value)
       notify(title='CoWIN slot available', message=alert_message)
 
-      # uncomment below if whatsapp notification enabled
-      # if send_whatsapp_alert:
-      #   send_whatsapp_notification(alert_message)
+      if SEND_WHATSAPP_ALERT:
+        send_whatsapp_notification(alert_message)
 
 f.close()
