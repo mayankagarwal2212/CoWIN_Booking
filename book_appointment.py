@@ -23,7 +23,10 @@ file_name = 'available_slots.csv'
 if check_os() == 3:
   file_name = '{}\\available_slots.csv'.format(WINDOWS_ABSOLUTE_PATH)
 
-available_slots = csv.DictReader(open(file_name, 'r'))
+available_slots = list(csv.DictReader(open(file_name, 'r')))
+if len(available_slots) == 0:
+  print("No slot available for booking")
+  exit()
 
 # -------------------------Generate OTP----------------------------
 
