@@ -2,7 +2,7 @@
 COWIN_MOBILE_NUMBER = 9999999999
 
 # Search by PIN
-PINCODE = '826001'
+PINCODE = '814112'
 
 # To search by district, add district id here
 DISTRICT_ID = ''
@@ -30,6 +30,11 @@ BENEFICIARIES = [
 ]
 # update this to 2 if its for the second dose
 VACCINE_DOSE = 1
+
+# update this with the vaccine eligible for 2nd dose
+DOSE_2_VACCINE = 'COVAXIN'
+DOSE_2_DUE_DATE = '15-06-2021'
+
 # Update the appointment id to cancel a booking
 BOOKED_APPOINTMENT_ID = ''
 

@@ -1,8 +1,9 @@
 #!/usr/bin/python
 
-import json, os, http.client, csv, datetime
+import json, os, http.client, csv
 from sys import platform
 from collections import OrderedDict
+from datetime import datetime, timedelta
 
 from variables import *
 
@@ -50,7 +51,7 @@ def get_available_slots(today):
   }
 
   if PINCODE:
-    conn.request("GET", "/api/v2/appointment/sessions/public/calendarByPin?pincode={}&date={}".format(PINCODE, today), payload, headers)    
+    conn.request("GET", "/api/v2/appointment/sessions/public/calendarByPin?pincode={}&date={}".format(PINCODE, today), payload, headers)
   else:
     conn.request("GET", "/api/v2/appointment/sessions/public/calendarByDistrict?district_id={}&date={}".format(DISTRICT_ID, today), payload, headers)
 
@@ -77,6 +78,9 @@ def get_available_slots(today):
       continue;
     for session in data.get("sessions"):
       if session.get("min_age_limit") == MIN_AGE_LIMIT and session.get(capacity_key) > 1:
+        # for 2nd dose, check the vaccine
+        if VACCINE_DOSE == 2 and session.get("vaccine") != DOSE_2_VACCINE:
+          continue;
         for slot in session.get('slots'):
           slot_info = OrderedDict()
           slot_info['Center Name'] = data.get("name")
@@ -105,8 +109,11 @@ def send_whatsapp_notification(message):
                          to=to_whatsapp_number)
 
 available_slots = list()
-available_slots += get_available_slots(datetime.datetime.today().strftime('%d-%m-%Y'))
-available_slots += get_available_slots((datetime.datetime.today() + datetime.timedelta(days=7)).strftime('%d-%m-%Y'))
+if VACCINE_DOSE == 2 and datetime.today() < datetime.strptime(DOSE_2_DUE_DATE, '%d-%m-%Y'):
+  exit()
+
+available_slots += get_available_slots(datetime.today().strftime('%d-%m-%Y'))
+available_slots += get_available_slots((datetime.today() + timedelta(days=7)).strftime('%d-%m-%Y'))
 
 file_name = 'available_slots.csv'
 if check_os() == 3:
