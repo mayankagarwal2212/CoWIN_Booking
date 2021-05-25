@@ -17,16 +17,6 @@ def check_os():
   elif platform == "win32":
     return 3
 
-# -------------------------Read available slots--------------------
-
-file_name = 'available_slots.csv'
-if check_os() == 3:
-  file_name = '{}\\available_slots.csv'.format(WINDOWS_ABSOLUTE_PATH)
-
-available_slots = list(csv.DictReader(open(file_name, 'r')))
-if len(available_slots) == 0:
-  print("No slot available for booking")
-  exit()
 
 # -------------------------Generate OTP----------------------------
 
@@ -162,6 +152,17 @@ f.close()
 
 # os.system("cairosvg captcha.svg -o captcha.png")
 # os.remove("captcha.svg")
+
+# -------------------------Read available slots--------------------
+
+file_name = 'available_slots.csv'
+if check_os() == 3:
+  file_name = '{}\\available_slots.csv'.format(WINDOWS_ABSOLUTE_PATH)
+
+available_slots = list(csv.DictReader(open(file_name, 'r')))
+if len(available_slots) == 0:
+  print("No slot available for booking")
+  exit()
 
 # -------------------------Book Slot----------------------------
 

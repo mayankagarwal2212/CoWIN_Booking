@@ -90,6 +90,16 @@ Now, enter the captcha generated. Your slot will be booked.
 
 Note: You can create an alias to execute these scripts for quick response
 
+# Book slots in a special window
+
+To book slots in a special window, when the slots are expected to be available, pre-generate the token and captcha.
+
+First, execute the script: `python book_appointment.py`. Note that the token will expire in 15 mins, so execute this keeping in mind that the token does not expire during your slot availability window.
+
+Now, enter the generated captcha in the `variables.py` file in the `GENERATED_CAPTCHA` variable.
+
+Execute the command `python book_slot_by_centers.py` during the slot window.
+
 # How to cancel my booking
 
 Update the appointment_id in the `cancel_slot.py` and run the following command:
