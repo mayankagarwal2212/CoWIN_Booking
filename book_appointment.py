@@ -152,8 +152,8 @@ f = open(file_name, "w")
 f.write(svg_xml)
 f.close()
 
-# os.system("cairosvg captcha.svg -o captcha.png")
-# os.remove("captcha.svg")
+os.system("cairosvg captcha.svg -o captcha.png")
+os.remove("captcha.svg")
 
 # -------------------------Read available slots--------------------
 
@@ -170,20 +170,27 @@ if len(available_slots) == 0:
 
 print("Choose from the open slots\n")
 session_id = None
+slot = None
+python_version = get_python_version()
 
 for slot_info in available_slots:
   print(json.dumps(slot_info, indent=4))
-  if (raw_input("Book this slot? - y/n\n").lower() if get_python_version() < 3 else input("Book this slot? - y/n\n").lower()) == 'y':
+  if (raw_input("confirm this session - y/n\n").lower() if python_version < 3 else input("confirm this session - y/n\n").lower()) == 'y':
     session_id = slot_info.get('Session Id')
     center_id = slot_info.get('Center ID')
-    slot = slot_info.get('Slot')
+
+    for session_slot in slot_info.get('Slots').split(','):
+      slot_message = "Slot :: {} ? - y/n\n".format(session_slot)
+      if (raw_input(slot_message).lower() if python_version < 3 else input(slot_message).lower()) == 'y':
+        slot = session_slot
+        break;
     break;
 
-if session_id is None:
+if session_id is None or slot is None:
   print("No slot selected")
   exit()
 
-captcha = raw_input("Enter the captcha :: \n") if get_python_version() < 3 else input("Enter the captcha :: \n")
+captcha = raw_input("Enter the captcha :: \n") if python_version < 3 else input("Enter the captcha :: \n")
 request_data = {
   "center_id": int(center_id),
   "session_id": session_id,

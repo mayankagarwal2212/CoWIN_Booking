@@ -77,23 +77,22 @@ def get_available_slots(today):
     if len(PREFERRED_CENTERS) > 0 and data.get("center_id") not in PREFERRED_CENTERS:
       continue;
     for session in data.get("sessions"):
+      # for 2nd dose, check the vaccine
+      if VACCINE_DOSE == 2 and session.get("vaccine") != DOSE_2_VACCINE:
+        continue;
       if session.get("min_age_limit") == MIN_AGE_LIMIT and session.get(capacity_key) > 1:
-        # for 2nd dose, check the vaccine
-        if VACCINE_DOSE == 2 and session.get("vaccine") != DOSE_2_VACCINE:
-          continue;
-        for slot in session.get('slots'):
-          slot_info = OrderedDict()
-          slot_info['Center Name'] = data.get("name")
-          slot_info['Center Address'] = data.get("address")
-          slot_info['Block Name'] = data.get("block_name")
-          slot_info['Vaccine'] = session.get("vaccine")
-          slot_info['Date'] = session.get("date")
-          slot_info['Slot'] = slot
-          slot_info['Fee Type'] = data.get("fee_type")
-          slot_info['Doses'] = session.get('available_capacity_dose1')
-          slot_info['Center ID'] = data.get("center_id")
-          slot_info['Session Id'] = session.get('session_id')
-          available_slots.append(slot_info)
+        slot_info = OrderedDict()
+        slot_info['Center Name'] = data.get("name")
+        slot_info['Center Address'] = data.get("address")
+        slot_info['Block Name'] = data.get("block_name")
+        slot_info['Vaccine'] = session.get("vaccine")
+        slot_info['Date'] = session.get("date")
+        slot_info['Fee Type'] = data.get("fee_type")
+        slot_info['Doses'] = session.get('available_capacity_dose1')
+        slot_info['Slots'] = ','.join(session.get('slots'))
+        slot_info['Center ID'] = data.get("center_id")
+        slot_info['Session Id'] = session.get('session_id')
+        available_slots.append(slot_info)
 
   return available_slots
 

@@ -104,14 +104,15 @@ for data in centers:
     continue;
   if len(PREFERRED_CENTERS) > 0 and data.get("center_id") not in PREFERRED_CENTERS:
     continue;
+
   for session in data.get("sessions"):
+   # for 2nd dose, check the vaccine
+    if VACCINE_DOSE == 2 and session.get("vaccine") != DOSE_2_VACCINE:
+      continue;
     if session.get("min_age_limit") == MIN_AGE_LIMIT and session.get(capacity_key) > 0:
-      # for 2nd dose, check the vaccine
-      if VACCINE_DOSE == 2 and session.get("vaccine") != DOSE_2_VACCINE:
-        continue;
-      for slot in session.get('slots'):
-        slot_info = OrderedDict()
-        slot_info['Slot'] = slot
-        slot_info['Center ID'] = data.get("center_id")
-        slot_info['Session Id'] = session.get('session_id')
-        book_slot(slot_info)
+      slot_info = OrderedDict()
+      # booking the second slot for easy commute
+      slot_info['Slot'] = session.get('slots')[1]
+      slot_info['Center ID'] = data.get("center_id")
+      slot_info['Session Id'] = session.get('session_id')
+      book_slot(slot_info)
