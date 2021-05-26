@@ -98,7 +98,7 @@ First, execute the script: `python book_appointment.py`. Note that the token wil
 
 Now, enter the generated captcha in the `variables.py` file in the `GENERATED_CAPTCHA` variable.
 
-Execute the command `book_special_window_slot.py` in the special window.
+Execute the command `special_window_booking.py` in the special window.
 
 # How to cancel my booking
 
