@@ -45,4 +45,8 @@ headers = {
 conn.request("POST", "/api/v2/appointment/cancel", payload, headers)
 resp = conn.getresponse()
 data = resp.read()
-print("Appointment canceled")
+
+if resp.status == 200:
+  print("Appointment canceled")
+else:
+  print(data)

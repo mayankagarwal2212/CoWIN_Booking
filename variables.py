@@ -21,12 +21,11 @@ CENTERS_TO_IGNORE = [
 # add preferred centers to get alert for specific centers only
 PREFERRED_CENTERS = [
 	# 676990,
-	# 618194,
 ]
 
 # beneficiary list for booking the slot. This is the reference id of the user
 BENEFICIARIES = [
-	# '13993408170600',
+	# 13993408170600
 ]
 # update this to 2 if its for the second dose
 VACCINE_DOSE = 1
@@ -35,8 +34,21 @@ VACCINE_DOSE = 1
 DOSE_2_VACCINE = 'COVAXIN'
 DOSE_2_DUE_DATE = '15-06-2021'
 
+###### Special window booking ########
 # Provide the captcha generated if booking the slot using book_slot_by_centers
 GENERATED_CAPTCHA = 'TWK63'
+
+# exclude centers to book slots directly in the special window
+DIRECT_BOOKING_EXCLUDE_CENTERS = [
+	# 676990,
+]
+
+# add preferred centers to book slots directly in the special window
+DIRECT_BOOKING_PREFERRED_CENTERS = [
+	# 676990,
+]
+
+
 # Update the appointment id to cancel a booking
 BOOKED_APPOINTMENT_ID = ''
 

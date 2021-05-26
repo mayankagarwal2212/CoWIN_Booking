@@ -35,7 +35,7 @@ Update the variables in the `variables.py` file with the expected details, like 
 
 **For Windows user:**
 
-Update the absolute path to this folder in the scripts.
+Update the absolute path to this folder in `cowin_alert.bat` and `variables.py`.
 
 Then,
 ```
@@ -98,15 +98,11 @@ First, execute the script: `python book_appointment.py`. Note that the token wil
 
 Now, enter the generated captcha in the `variables.py` file in the `GENERATED_CAPTCHA` variable.
 
-Execute the command `python book_slot_by_centers.py` during the slot window.
+Execute the command `book_special_window_slot.py` in the special window.
 
 # How to cancel my booking
 
-Update the appointment_id in the `cancel_slot.py` and run the following command:
-
-`python cancel_slot.py`
-
-**Do share your valuable feedback**
+Update the `BOOKED_APPOINTMENT_ID` in the `variables.py` file and execute the command: `python cancel_slot.py`
 
 # References
 
@@ -123,3 +119,5 @@ https://towardsdatascience.com/how-to-make-windows-10-toast-notifications-with-p
 https://stackoverflow.com/questions/23708898/pip-is-not-recognized-as-an-internal-or-external-command
 
 https://www.winhelponline.com/blog/run-bat-files-invisibly-without-displaying-command-prompt/
+
+**Do share your valuable feedback**

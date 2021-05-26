@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 
-import hashlib, http.client, json, os, csv
+import hashlib, http.client, json, os, csv, sys
 from sys import platform
 
 from variables import *
@@ -17,6 +17,8 @@ def check_os():
   elif platform == "win32":
     return 3
 
+def get_python_version():
+  return sys.version_info[0]
 
 # -------------------------Generate OTP----------------------------
 
@@ -171,7 +173,7 @@ session_id = None
 
 for slot_info in available_slots:
   print(json.dumps(slot_info, indent=4))
-  if raw_input("Book this slot? - y/n\n").lower() == 'y':
+  if (raw_input("Book this slot? - y/n\n").lower() if get_python_version() < 3 else input("Book this slot? - y/n\n").lower()) == 'y':
     session_id = slot_info.get('Session Id')
     center_id = slot_info.get('Center ID')
     slot = slot_info.get('Slot')
@@ -181,7 +183,7 @@ if session_id is None:
   print("No slot selected")
   exit()
 
-captcha = raw_input("Enter the captcha :: \n")
+captcha = raw_input("Enter the captcha :: \n") if get_python_version() < 3 else input("Enter the captcha :: \n")
 request_data = {
   "center_id": int(center_id),
   "session_id": session_id,
