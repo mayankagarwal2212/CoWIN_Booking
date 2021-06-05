@@ -16,7 +16,6 @@ def book_slot(slot_info):
     "center_id": int(center_id),
     "session_id": session_id,
     "slot": slot,
-    "captcha": GENERATED_CAPTCHA,
     "beneficiaries": BENEFICIARIES,
     "dose": VACCINE_DOSE,
   }

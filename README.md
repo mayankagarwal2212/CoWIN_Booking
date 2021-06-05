@@ -77,26 +77,22 @@ Once the slot is available, open a new terminal and follow the steps shared on h
 
 # How to book the slot
 
-Generate the token and captcha required while booking the slot.
+Generate the token required while booking the slot.
 Run the following command:
 
 `python book_appointment.py`
 
-When prompted, enter the otp. This will generate a fresh token and the captcha.
+When prompted, enter the otp. This will generate a fresh token.
 
-It will now prompt you to choose a slot from the available slots. Enter Y for the selected slot.
-
-Now, enter the captcha generated. Your slot will be booked.
+It will now prompt you to choose a slot from the available slots. Enter Y for the selected slot. Your slot will be booked.
 
 Note: You can create an alias to execute these scripts for quick response
 
 # Book slots in a special window
 
-To book slots in a special window, when the slots are expected to be available, pre-generate the token and captcha.
+To book slots in a special window, when the slots are expected to be available, pre-generate the token.
 
 First, execute the script: `python book_appointment.py`. Note that the token will expire in 15 mins, so execute this keeping in mind that the token does not expire during your slot availability window.
-
-Now, enter the generated captcha in the `variables.py` file in the `GENERATED_CAPTCHA` variable.
 
 Execute the command `special_window_booking.py` in the special window.
 

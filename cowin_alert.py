@@ -88,7 +88,7 @@ def get_available_slots(today):
         slot_info['Vaccine'] = session.get("vaccine")
         slot_info['Date'] = session.get("date")
         slot_info['Fee Type'] = data.get("fee_type")
-        slot_info['Doses'] = session.get('available_capacity_dose1')
+        slot_info['Doses'] = session.get(capacity_key)
         slot_info['Slots'] = ','.join(session.get('slots'))
         slot_info['Center ID'] = data.get("center_id")
         slot_info['Session Id'] = session.get('session_id')

@@ -2,7 +2,7 @@
 COWIN_MOBILE_NUMBER = 9999999999
 
 # Search by PIN
-PINCODE = '826001'
+PINCODE = '814112'
 
 # To search by district, add district id here
 DISTRICT_ID = ''
@@ -20,23 +20,22 @@ CENTERS_TO_IGNORE = [
 
 # add preferred centers to get alert for specific centers only
 PREFERRED_CENTERS = [
-	# 676990,
+	# 562896,
+	# 609082,
 ]
 
 # beneficiary list for booking the slot. This is the reference id of the user
 BENEFICIARIES = [
-	# 13993408170600
+	# 54764436180790,
 ]
 # update this to 2 if its for the second dose
 VACCINE_DOSE = 1
 
 # update this with the vaccine eligible for 2nd dose
 DOSE_2_VACCINE = 'COVAXIN'
-DOSE_2_DUE_DATE = '15-06-2021'
+DOSE_2_DUE_DATE = '11-06-2021'
 
 ###### Special window booking ########
-# Provide the captcha generated if booking the slot using book_slot_by_centers
-GENERATED_CAPTCHA = 'TWK63'
 
 # exclude centers to book slots directly in the special window
 DIRECT_BOOKING_EXCLUDE_CENTERS = [
@@ -45,7 +44,7 @@ DIRECT_BOOKING_EXCLUDE_CENTERS = [
 
 # add preferred centers to book slots directly in the special window
 DIRECT_BOOKING_PREFERRED_CENTERS = [
-	# 676990,
+	# 562896,
 ]
 
 
